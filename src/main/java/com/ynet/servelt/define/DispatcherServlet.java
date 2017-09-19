@@ -84,7 +84,7 @@ public class DispatcherServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		// 获取所有类
 		scanClass(scanPackage);
-		/*******************利用反射机制实例化类开始**************************/
+		/******************* 利用反射机制实例化类开始 **************************/
 		try {
 			filterAndInstanceClass();
 		} catch (Exception e) {
@@ -94,19 +94,19 @@ public class DispatcherServlet extends HttpServlet {
 		for (BeanFactory bean : beanFactories) {
 			System.out.println(bean.toString());
 		}
-		/*******************利用反射机制实例化类结束**************************/
-		
-		/*******************利用反射机制实例化映射地址开始**************************/
+		/******************* 利用反射机制实例化类结束 **************************/
+
+		/******************* 利用反射机制实例化映射地址开始 **************************/
 		mapping();
-		
+
 		for (HandlerMapping mapping : handlerMappings) {
 			System.out.println(mapping.toString());
 		}
-		/*******************利用反射机制实例化映射地址结束**************************/
-		
-		/*******************IOC容器注入开始**************************/
+		/******************* 利用反射机制实例化映射地址结束 **************************/
+
+		/******************* IOC容器注入开始 **************************/
 		iocInject();
-		/*******************IOC容器注入结束**************************/
+		/******************* IOC容器注入结束 **************************/
 	}
 
 	/**
@@ -212,6 +212,19 @@ public class DispatcherServlet extends HttpServlet {
 			scanPackage = scanPackage.substring(1);
 		}
 		return scanPackage.replaceAll("/", ".");
+	}
+
+	@Override
+	public void destroy() {
+		super.destroy();
+		beanFactories.clear();
+		handlerMappings.clear();
+		packageNames.clear();
+		scanPackage = null;
+		beanFactories = null;
+		handlerMappings = null;
+		packageNames = null;
+		System.out.println("System has finshed");
 	}
 
 }
